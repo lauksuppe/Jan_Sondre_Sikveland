@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<title>Welcome</title>
-		<link rel="stylesheet" href="http://localhost:1234/loginproject/css/main.css">
+		<link rel="stylesheet" href="http://localhost:1234/public/loginproject/css/main.css">
 	</head>
 	<body>
 		<?php

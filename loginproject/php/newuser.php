@@ -1,11 +1,11 @@
 <html>
 	<head>
 		<title>Create User</title>
-		<link rel="stylesheet" href="http://localhost:1234/loginproject/css/main.css">
+		<link rel="stylesheet" href="http://localhost:1234/public/loginproject/css/main.css">
 	</head>
 	<body>
 	<div class="container">
-			<form action="http://localhost:1234/loginproject/php/newuser.php" method="post">
+			<form action="http://localhost:1234/public/loginproject/php/newuser.php" method="post">
 				Email: <input type="text" name="email" placeholder="Enter Email" required><br>
 
 				Username: <input type="text" name="username" placeholder="Enter Username" required><br>
@@ -16,9 +16,9 @@
 
 				<button type="submit" name="submit">Create User</button>
 
-				<span class="one"><a href="http://localhost:1234/loginproject/forgotpassword.html">Forgot password?</a></span>
+				<span class="one"><a href="http://localhost:1234/public/loginproject/forgotpassword.html">Forgot password?</a></span>
 				
-				<span class="two"><a href="http://localhost:1234/loginproject/index.html">Log In</a></span>
+				<span class="two"><a href="http://localhost:1234/public/loginproject/index.html">Log In</a></span>
 			</form>
 		<?php
 		$servername = "localhost";
@@ -98,7 +98,7 @@
 				VALUES ('$username', '$password', '$email')";
 
 				if ($conn->query($sql) === TRUE) {
-				    header("Location: http://localhost:1234/loginproject/php/login.php?message=Account Created, Try Logging In.");
+				    header("Location: http://localhost:1234/public/loginproject/php/login.php?message=Account Created, Try Logging In.");
 				} else {
 				    echo "<p>Error: " . $sql . "<br>" . $conn->error . "</p>";
 				}

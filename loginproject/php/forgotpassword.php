@@ -1,18 +1,18 @@
 <html>
 	<head>
 		<title>Forgot Password</title>
-		<link rel="stylesheet" href="http://localhost:1234/loginproject/css/main.css">
+		<link rel="stylesheet" href="http://localhost:1234/public/loginproject/css/main.css">
 	</head>
 	<body>
 		<div class="container">
-			<form action="http://localhost:1234/loginproject/php/forgotpassword.php" method="post">
+			<form action="http://localhost:1234/public/loginproject/php/forgotpassword.php" method="post">
 				Email: <input type="text" name="email" placeholder="Enter Your Email Address" required><br>
 
 				<button type="submit" name="submit">Reset Password</button>
 
-				<span class="one"><a href="http://localhost:1234/loginproject/newuser.html">New User</a></span>
+				<span class="one"><a href="http://localhost:1234/public/loginproject/newuser.html">New User</a></span>
 				
-				<span class="two"><a href="http://localhost:1234/loginproject/index.html">Log In</a></span>
+				<span class="two"><a href="http://localhost:1234/public/loginproject/index.html">Log In</a></span>
 			</form>
 		</div>
 		<?php
