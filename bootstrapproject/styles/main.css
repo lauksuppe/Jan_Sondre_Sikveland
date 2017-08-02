@@ -1,15 +1,13 @@
-.black {
-	background: #000;
+body {
+	font-family: "Georgia", Georgia, serif;
+	font-size: 170%;
 }
 
-.gray {
-	background: #999;
-}
-
-.darkgray {
-	background: #333;
+header {
+	margin-bottom: 20px;
 }
 
 footer {
+	margin-top: 20px;
 	text-align: center;
 }
