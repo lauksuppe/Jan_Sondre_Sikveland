@@ -6,9 +6,9 @@
 	<body>
 	<div class="container">
 			<form action="http://localhost:1234/public/loginproject/php/newuser.php" method="post">
-				Email: <input type="text" name="email" placeholder="Enter Email" required><br>
+				Email (Up to 31 characters): <input type="text" name="email" placeholder="Enter Email" required><br>
 
-				Username: <input type="text" name="username" placeholder="Enter Username" required><br>
+				Username (5-20 characters): <input type="text" name="username" placeholder="Enter Username" required><br>
 
 				Password: <input type="password" name="password" placeholder="Enter Password" required><br>
 
@@ -21,10 +21,10 @@
 				<span class="two"><a href="http://localhost:1234/public/loginproject/index.html">Log In</a></span>
 			</form>
 		<?php
-		$servername = "localhost";
-		$dbusername = "loginquery";
-		$dbpassword = "password";
-		$dbname = "loginproject";
+		$servername = 'localhost';
+		$dbusername = 'loginquery';
+		$dbpassword = 'password';
+		$dbname = 'loginproject';
 
 		if(isset($_POST['submit'])) {
 			$data_missing = array();
@@ -55,17 +55,30 @@
 
 			if(empty($data_missing)) {
 				if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-					echo "<p>Email is invalid.</p>";
+					echo '<p>Email is invalid.</p>';
+					exit();
+				}
+
+				if(strlen($email) > 31) {
+					echo '<p>Email is too long.</p>';
+					exit();
+				}
+
+				if(strlen($username) > 20) {
+					echo '<p>Username is too long.</p>';
+					exit();
+				} else if(strlen($username) < 5) {
+					echo '<p>Username is too short.</p>';
 					exit();
 				}
 
 				if(preg_match('/\s/', $password) || preg_match('/\s/', $pwrepeat)) {
-					echo "<p>Password cannot contain any whitespace.</p>";
+					echo '<p>Password cannot contain any whitespace.</p>';
 					exit();
 				}
 
 				if(!($password === $pwrepeat)) {
-					echo "<p>Passwords are not identical.</p>";
+					echo '<p>Passwords are not identical.</p>';
 					exit();
 				}
 
@@ -73,43 +86,52 @@
 
 				$conn = new mysqli($servername, $dbusername, $dbpassword, $dbname);
 				if ($conn->connect_error) {
-				    die("Connection failed: " . $conn->connect_error);
+				    die('Connection failed: ' . $conn->connect_error);
 				} 
 
-				$sql = "SELECT username FROM user WHERE username = '$username'";
+				$query = 'SELECT username FROM user WHERE username = ?';
+				$stmt = $conn->prepare($query);
+				$stmt->bind_param('s', $username);
 
-				$result = $conn->query($sql);
+				$stmt->execute();
+
+				$result = $stmt->get_result();
 
 				if($result->num_rows > 0) {
-					echo "<p>Username is already in use.</p>";
+					echo '<p>Username is already in use.</p>';
 					exit();
 				}
 
-				$sql = "SELECT email FROM user WHERE email = '$email'";
+				$query = 'SELECT email FROM user WHERE email = ?';
+				$stmt = $conn->prepare($query);
+				$stmt->bind_param('s', $email);
 
-				$result = $conn->query($sql);
+				$stmt->execute();
+
+				$result = $stmt->get_result();
 
 				if($result->num_rows > 0) {
-					echo "<p>Email is already registered.</p>";
+					echo '<p>Email is already registered.</p>';
 					exit();
 				}
 
-				$sql = "INSERT INTO user (username, password, email)
-				VALUES ('$username', '$password', '$email')";
+				$query = 'INSERT INTO user (username, password, email) VALUES (?, ?, ?)';
+				$stmt = $conn->prepare($query);
+				$stmt->bind_param('sss', $username, $password, $email);
 
-				if ($conn->query($sql) === TRUE) {
-				    header("Location: http://localhost:1234/public/loginproject/php/login.php?message=Account Created, Try Logging In.");
+				if ($stmt->execute() === TRUE) {
+				    header('Location: http://localhost:1234/public/loginproject/php/login.php?message=Account Created, Try Logging In.');
 				} else {
-				    echo "<p>Error: " . $sql . "<br>" . $conn->error . "</p>";
+				    echo '<p>Error: ' . $query . '<br>' . $conn->error . '</p>';
 				}
 
 				$conn->close();
 			} else {
-				echo "<p>You need to enter the following data: ";
+				echo '<p>You need to enter the following data: ';
 				foreach($data_missing as $missing) {
 					echo "$missing, ";
 				}
-				echo "</p>";
+				echo '</p>';
 			}
 		}
 		?>

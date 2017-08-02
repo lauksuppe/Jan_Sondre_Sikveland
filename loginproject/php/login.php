@@ -25,10 +25,10 @@
 			echo "<p>$message</p>";
 		}
 
-		$servername = "localhost";
-		$dbusername = "loginquery";
-		$dbpassword = "password";
-		$dbname = "loginproject";
+		$servername = 'localhost';
+		$dbusername = 'loginquery';
+		$dbpassword = 'password';
+		$dbname = 'loginproject';
 
 
 		if(isset($_POST['submit'])) {
@@ -48,21 +48,25 @@
 
 			if(empty($data_missing)) {
 				if(preg_match('/\s/', $password)) {
-					echo "<p>Password cannot contain any whitespace.</p>";
+					echo '<p>Password cannot contain any whitespace.</p>';
 					exit();
 				}
 
 				$conn = new mysqli($servername, $dbusername, $dbpassword, $dbname);
 				if ($conn->connect_error) {
-				    die("Connection failed: " . $conn->connect_error);
+				    die('Connection failed: ' . $conn->connect_error);
 				} 
 
-				$sql = "SELECT username, password FROM user WHERE username = '$username'";
+				$query = 'SELECT username, password FROM user WHERE username = ?';
+				$stmt = $conn->prepare($query);
+				$stmt->bind_param('s', $username);
 
-				$result = $conn->query($sql);
+				$stmt->execute();
+
+				$result = $stmt->get_result();
 
 				if($result->num_rows == 0) {
-					echo "<p>Username is not registered.</p>";
+					echo '<p>Username is not registered.</p>';
 					exit();
 				}
 
@@ -72,15 +76,15 @@
 					header("Location: http://localhost:1234/public/loginproject/php/loggedin.php?username=$username");
 				}
 
-				echo "<p>Incorrect Password.</p>";
+				echo '<p>Incorrect Password.</p>';
 
 				$conn->close();
 			} else {
-				echo "<p>You need to enter the following data: ";
+				echo '<p>You need to enter the following data: ';
 				foreach($data_missing as $missing) {
 					echo "$missing, ";
 				}
-				echo "</p>";
+				echo '</p>';
 			}
 		}
 		?> 

@@ -16,10 +16,10 @@
 			</form>
 		</div>
 		<?php
-		$servername = "localhost";
-		$dbusername = "loginquery";
-		$dbpassword = "password";
-		$dbname = "loginproject";
+		$servername = 'localhost';
+		$dbusername = 'loginquery';
+		$dbpassword = 'password';
+		$dbname = 'loginproject';
 
 		if(isset($_POST['submit'])) {
 			$data_missing = array();
@@ -27,32 +27,42 @@
 			if(empty($_POST['email'])) {
 				$data_missing[] = 'Email';
 			} else {
-				$email = $_POST['emai'];
+				$email = $_POST['email'];
 			}
 
 			if(empty($data_missing)) {
-				
+				if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+					echo '<p>Email is invalid.</p>';
+					exit();
+				}
 
 				$conn = new mysqli($servername, $dbusername, $dbpassword, $dbname);
 				if ($conn->connect_error) {
-				    die("Connection failed: " . $conn->connect_error);
+				    die('Connection failed: ' . $conn->connect_error);
 				} 
 
+				$query = 'SELECT email FROM user WHERE email = ?';
+				$stmt = $conn->prepare($query);
+				$stmt->bind_param('s', $email);
 
+				$stmt->execute();
 
-				if ($conn->query($sql) === TRUE) {
-				    echo "<p>Logged In.</p>";
-				} else {
-				    echo "<p>Error: " . $sql . "<br>" . $conn->error . "</p>";
+				$result = $stmt->get_result();
+
+				if($result->num_rows < 1) {
+					echo '<p>Email is not registered to any account.</p>';
+					exit();
 				}
+
+				//TODO: Send email with password reset/link
 
 				$conn->close();
 			} else {
-				echo "<p>You need to enter the following data: ";
+				echo '<p>You need to enter the following data: ';
 				foreach($data_missing as $missing) {
 					echo "$missing, ";
 				}
-				echo "</p>";
+				echo '</p>';
 			}
 		}
 		?> 
