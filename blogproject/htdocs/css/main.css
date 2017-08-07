@@ -1,0 +1,38 @@
+.blogposts {
+	margin: 0;
+	padding: 0;
+}
+
+.blogpost {
+	list-style-type: none;
+	padding: 0;
+	margin: 15px 0;
+}
+
+ul.links, .blogpost h2, .blogpost p {
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+}
+
+.blogpost h2, .blogpost p {
+	margin-left: 10px;
+}
+
+.smalltext {
+	width: 200px;
+}
+
+.bigtext {
+	height: 200px;
+	width: 200px;
+}
+
+.links li {
+	list-style-type: none;
+	display: inline-block;
+}
+
+.container h1, .container p, a, form {
+	margin-left: 10px;
+}
